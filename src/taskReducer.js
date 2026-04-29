@@ -13,6 +13,13 @@ export default function taskReducer(notes, action) {
 
     case "DELETE_NOTE":
       return notes.filter((note) => note.id !== action.id);
+
+    case "EDIT_NOTE":
+      return notes.map((note) => {
+        if (note.id === action.task.id) {
+          return console.log("Edit");
+        }
+      });
     default:
       return notes;
   }

@@ -10,6 +10,7 @@ let initialId = 3;
 // App component
 export const App = () => {
   const [notes, dispatch] = useReducer(taskReducer, initialData);
+  const [isEdit, setIsEdit] = useState(false);
 
   // Function to Submit Form
   function handleNoteAdd(noteData) {
@@ -25,6 +26,11 @@ export const App = () => {
   function handleNoteDelete(noteId) {
     dispatch({ type: "DELETE_NOTE", id: noteId });
   }
+
+  //Function to Edit Note
+  function handleNoteEdit() {
+    dispatch({ type: "EDIT_NOTE", title: title, note: note });
+  }
   return (
     <>
       <AddNote onAddNote={handleNoteAdd} />
@@ -33,7 +39,7 @@ export const App = () => {
           .map((note) => (
             <NoteCard
               key={note.id}
-              data={note}
+              note={note}
               handleDelete={handleNoteDelete}
             />
           ))

@@ -1,36 +1,91 @@
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { cn } from "../libs/cn";
+import CloseButton from "./buttons/CloseButton";
 
-export const NoteCard = ({ data, handleDelete, handleEdit }) => {
+export const NoteCard = ({ note, handleDelete }) => {
   const [isHover, setIsHover] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
   function handleMouseEvent() {
     setIsHover((prev) => !prev);
   }
+
+  function handleEdit() {
+    setIsEdit((prev) => !prev);
+  }
+
   return (
     <>
-      <div
-        className=" px-2 py-4 m-4 shadow-sm rounded-lg hover:shadow-lg flex-row justify-around  items-center"
-        onMouseEnter={handleMouseEvent}
-        onMouseLeave={handleMouseEvent}
-        onClick={handleEdit}
-      >
-        <div>
-          <h1 className="text-md font-semibold">{data.title}</h1>
-          <h3 className="text-sm ">{data.note}</h3>
+      {isEdit ? (
+        <div
+          className="absolute inset-0 h-full w-full bg-amber-50"
+          style={{
+            background: "rgba(255, 255, 255, 0.12)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(5.1px)",
+            WebkitBackdropFilter: "blur(5.1px)",
+            border: " 1px solid rgba(255, 255, 255, 0.28)",
+          }}
+        >
+          <div className=" w-full h-full rounded-lg flex justify-center items-center">
+            <div
+              className="w-125 p-4 m-4"
+              style={{
+                boxShadow:
+                  "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
+              }}
+            >
+              <label className="w-full">
+                <input
+                  className="text-xl font-semibold outline-none mb-2 w-full"
+                  value={note.title}
+                />
+              </label>
+              <textarea className="outline-none text-md mt-2 w-full overflow-hidden resize-none">
+                {note.note}
+              </textarea>
+              <div className="justify-self-end">
+                <CloseButton onClick={handleEdit}>Close</CloseButton>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center justify-end h-5">
-          <button
-            className={cn(
-              "p-2 my-2 transition-all duration-300 rounded-md hover:bg-gray-100 hover:cursor-pointer",
-              { hidden: !isHover },
-            )}
-            onClick={() => handleDelete(data.id)}
-          >
-            <Trash size={16} />
-          </button>
+      ) : (
+        <div
+          className={cn(
+            "px-2 py-4 m-4 rounded-lg hover:shadow-lg flex-row justify-around  items-center",
+          )}
+          style={{
+            boxShadow: isHover
+              ? "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px"
+              : "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px",
+          }}
+          onMouseEnter={handleMouseEvent}
+          onMouseLeave={handleMouseEvent}
+          onClick={handleEdit}
+        >
+          <div>
+            <h1 className="text-md font-semibold">{note.title}</h1>
+            <h3 className="text-sm ">{note.note}</h3>
+          </div>
+          <div className="flex items-center justify-end h-5">
+            <button
+              className={cn(
+                "p-2 my-2 transition-all duration-300 rounded-md hover:bg-gray-100 hover:cursor-pointer",
+                { hidden: !isHover },
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(data.id);
+              }}
+            >
+              <Trash size={16} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

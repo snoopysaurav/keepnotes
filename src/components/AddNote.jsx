@@ -32,24 +32,30 @@ export default function AddNote({ onAddNote }) {
         className="flex items-center justify-center"
         onBlur={handleContainerBlur}
       >
-        <div className="p-3 m-4 shadow-sm w-150 [&_input]:text-gray-600">
+        <div
+          className="p-3 m-4 w-125 rounded-lg"
+          style={{
+            boxShadow:
+              "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
+          }}
+        >
           {isActive && (
             <>
-              <label className="w-100">
+              <label className="w-full">
                 <input
                   placeholder="Title"
-                  className="text-xl font-semibold outline-none mb-2"
+                  className="text-xl font-semibold outline-none mb-2 w-full"
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
                 />
               </label>
             </>
           )}
-          <label className="w-100">
+          <label className="w-full">
             <textarea
               ref={textareaRef}
               placeholder="Take a note..."
-              className="outline-none text-md mt-2 w-100 h-auto overflow-hidden resize-none"
+              className="outline-none text-md mt-2 w-full overflow-hidden resize-none"
               onInput={handleInput}
               onFocus={() => setIsActive(true)}
               onChange={(e) => setNote(e.target.value)}
