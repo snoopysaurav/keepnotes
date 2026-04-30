@@ -1,5 +1,10 @@
 // Reducer function for useReducer()
-export default function taskReducer(notes, action) {
+
+import { createContext } from "react";
+
+export const GlobalStateContext = createContext();
+
+export function taskReducer(notes, action) {
   switch (action.type) {
     case "ADD_NOTE":
       return [
@@ -14,12 +19,6 @@ export default function taskReducer(notes, action) {
     case "DELETE_NOTE":
       return notes.filter((note) => note.id !== action.id);
 
-    case "EDIT_NOTE":
-      return notes.map((note) => {
-        if (note.id === action.task.id) {
-          return console.log("Edit");
-        }
-      });
     default:
       return notes;
   }

@@ -1,11 +1,13 @@
 import { Trash } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { cn } from "../libs/cn";
 import CloseButton from "./buttons/CloseButton";
 
 export const NoteCard = ({ note, handleDelete }) => {
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
+  //get data from context
 
   function handleMouseEvent() {
     setIsHover((prev) => !prev);
@@ -29,23 +31,27 @@ export const NoteCard = ({ note, handleDelete }) => {
             border: " 1px solid rgba(255, 255, 255, 0.28)",
           }}
         >
-          <div className=" w-full h-full rounded-lg flex justify-center items-center">
+          <div className=" w-full h-full flex justify-center items-center">
             <div
-              className="w-125 p-4 m-4"
+              className="w-125 p-4 m-4  rounded-lg"
               style={{
                 boxShadow:
                   "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
               }}
             >
+              <span className="text-red-400 font-semibold bg-gray-50 px-2 my-2 rounded-md">
+                Edit
+              </span>
               <label className="w-full">
                 <input
                   className="text-xl font-semibold outline-none mb-2 w-full"
                   value={note.title}
                 />
               </label>
-              <textarea className="outline-none text-md mt-2 w-full overflow-hidden resize-none">
-                {note.note}
-              </textarea>
+              <textarea
+                className="outline-none text-md mt-2 w-full overflow-hidden resize-none"
+                value={note.note}
+              ></textarea>
               <div className="justify-self-end">
                 <CloseButton onClick={handleEdit}>Close</CloseButton>
               </div>
@@ -73,12 +79,12 @@ export const NoteCard = ({ note, handleDelete }) => {
           <div className="flex items-center justify-end h-5">
             <button
               className={cn(
-                "p-2 my-2 transition-all duration-300 rounded-md hover:bg-gray-100 hover:cursor-pointer",
+                "p-2 my-2 transition-all duration-300 rounded-md hover:bg-gray-100 hover:cursor-pointer ",
                 { hidden: !isHover },
               )}
               onClick={(e) => {
                 e.stopPropagation();
-                handleDelete(data.id);
+                handleDelete(note.id);
               }}
             >
               <Trash size={16} />

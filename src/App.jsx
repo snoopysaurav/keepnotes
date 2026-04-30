@@ -1,17 +1,15 @@
-import { useReducer, useState } from "react";
+import { useContext, useReducer, useState } from "react";
 import AddNote from "./components/AddNote";
 import NoteCard from "./components/NoteCard";
-//Dummy Data Import
-import { initialData } from "./libs/initialData";
-import taskReducer from "./TaskReducer";
+
+import { GlobalStateContext, taskReducer } from "./store/taskReducer";
+import { GlobalProvider } from "./contexts/GlobalProvider";
 
 let initialId = 3;
 
 // App component
 export const App = () => {
-  const [notes, dispatch] = useReducer(taskReducer, initialData);
-  const [isEdit, setIsEdit] = useState(false);
-
+  const { notes, dispatch } = useContext(GlobalStateContext);
   // Function to Submit Form
   function handleNoteAdd(noteData) {
     dispatch({
@@ -27,14 +25,10 @@ export const App = () => {
     dispatch({ type: "DELETE_NOTE", id: noteId });
   }
 
-  //Function to Edit Note
-  function handleNoteEdit() {
-    dispatch({ type: "EDIT_NOTE", title: title, note: note });
-  }
   return (
     <>
       <AddNote onAddNote={handleNoteAdd} />
-      <div className="grid grid-cols-4 h-auto my-4">
+      <div className="grid grid-cols-4 grap-4 h-auto my-4">
         {notes
           .map((note) => (
             <NoteCard

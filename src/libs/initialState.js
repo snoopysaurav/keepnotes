@@ -1,4 +1,4 @@
-export const initialData = [
+export const initialState = [
   {
     id: 1,
     title: "Hello this is snoopy",
