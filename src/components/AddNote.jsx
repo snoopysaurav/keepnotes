@@ -10,7 +10,6 @@ export default function AddNote({ onAddNote }) {
 
   function handleContainerBlur(e) {
     if (e.currentTarget.contains(e.relatedTarget)) return;
-
     // Add note
     if (note === "") return;
 
@@ -63,7 +62,13 @@ export default function AddNote({ onAddNote }) {
           </label>
           {isActive && (
             <div className="flex items-center justify-end">
-              <CloseButton onClick={() => setIsActive(!isActive)}>
+              <CloseButton
+                onClick={() => {
+                  setIsActive(!isActive);
+                  setNote("");
+                  setTitle("");
+                }}
+              >
                 Close
               </CloseButton>
             </div>

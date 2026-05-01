@@ -3,17 +3,15 @@ import { useContext, useState } from "react";
 import { cn } from "../libs/cn";
 import CloseButton from "./buttons/CloseButton";
 
-export const NoteCard = ({ note, handleDelete }) => {
+export const NoteCard = ({ note, handleDelete, handleEdit }) => {
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
-  //get data from context
 
   function handleMouseEvent() {
     setIsHover((prev) => !prev);
   }
 
-  function handleEdit() {
+  function toggleEditMode() {
     setIsEdit((prev) => !prev);
   }
 
@@ -46,14 +44,28 @@ export const NoteCard = ({ note, handleDelete }) => {
                 <input
                   className="text-xl font-semibold outline-none mb-2 w-full"
                   value={note.title}
+                  onChange={(e) => {
+                    handleEdit({
+                      ...note,
+                      title: e.target.value,
+                    });
+                  }}
                 />
               </label>
               <textarea
                 className="outline-none text-md mt-2 w-full overflow-hidden resize-none"
                 value={note.note}
+                onChange={(e) => {
+                  handleEdit({
+                    ...note,
+                    note: e.target.value,
+                  });
+                }}
               ></textarea>
               <div className="justify-self-end">
-                <CloseButton onClick={handleEdit}>Close</CloseButton>
+                <CloseButton onClick={() => toggleEditMode()}>
+                  Close
+                </CloseButton>
               </div>
             </div>
           </div>
@@ -70,7 +82,7 @@ export const NoteCard = ({ note, handleDelete }) => {
           }}
           onMouseEnter={handleMouseEvent}
           onMouseLeave={handleMouseEvent}
-          onClick={handleEdit}
+          onClick={toggleEditMode}
         >
           <div>
             <h1 className="text-md font-semibold">{note.title}</h1>
