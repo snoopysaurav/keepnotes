@@ -12,6 +12,9 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
   }
 
   function toggleEditMode() {
+    if (note.title === "") {
+      handleDelete(note.id);
+    }
     setIsEdit((prev) => !prev);
   }
 
@@ -28,6 +31,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
             WebkitBackdropFilter: "blur(5.1px)",
             border: " 1px solid rgba(255, 255, 255, 0.28)",
           }}
+          onClick={toggleEditMode}
         >
           <div className=" w-full h-full flex justify-center items-center">
             <div
@@ -36,6 +40,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
                 boxShadow:
                   "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
               }}
+              onClick={(e) => e.stopPropagation()}
             >
               <span className="text-red-400 font-semibold bg-gray-50 px-2 my-2 rounded-md">
                 Edit
@@ -63,9 +68,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
                 }}
               ></textarea>
               <div className="justify-self-end">
-                <CloseButton onClick={() => toggleEditMode()}>
-                  Close
-                </CloseButton>
+                <CloseButton onClick={toggleEditMode}>Close</CloseButton>
               </div>
             </div>
           </div>
@@ -73,7 +76,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
       ) : (
         <div
           className={cn(
-            "px-2 py-4 m-4 rounded-lg hover:shadow-lg flex-row justify-around  items-center",
+            "px-2 py-4 m-4 rounded-lg hover:shadow-lg flex-row justify-end items-center",
           )}
           style={{
             boxShadow: isHover

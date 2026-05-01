@@ -5,7 +5,7 @@ export default function taskReducer(notes, action) {
         ...notes,
         {
           id: action.id,
-          title: action.title || "Untitled",
+          title: action.title || "",
           note: action.note || "",
         },
       ];
