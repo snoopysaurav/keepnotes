@@ -35,14 +35,14 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
         >
           <div className=" w-full h-full flex justify-center items-center">
             <div
-              className="w-125 p-4 m-4  rounded-lg"
+              className="w-125 p-4 m-4  rounded-lg bg-white"
               style={{
                 boxShadow:
                   "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="text-red-400 font-semibold bg-gray-50 px-2 my-2 rounded-md">
+              <span className="text-red-400 font-semibold bg-gray-100 px-2 my-2 rounded-md">
                 Edit
               </span>
               <label className="w-full">
@@ -87,7 +87,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
           onMouseLeave={handleMouseEvent}
           onClick={toggleEditMode}
         >
-          <div>
+          <div className="*:wrap-break-word">
             <h1 className="text-md font-semibold">{note.title}</h1>
             <h3 className="text-sm ">{note.note}</h3>
           </div>

@@ -31,15 +31,21 @@ export const App = () => {
   return (
     <>
       <AddNote onAddNote={handleNoteAdd} />
-      <div className="grid grid-cols-4 grap-4 h-auto my-4">
-        {notes.map((note) => (
-          <NoteCard
-            key={note.id}
-            note={note}
-            handleDelete={handleNoteDelete}
-            handleEdit={handleNoteEdit}
-          />
-        ))}
+      <div className="columns-5 gap-2">
+        {notes
+          .map((note) => (
+            <div
+              key={note.id}
+              className="w-full inline-block break-inside-avoid"
+            >
+              <NoteCard
+                note={note}
+                handleDelete={handleNoteDelete}
+                handleEdit={handleNoteEdit}
+              />
+            </div>
+          ))
+          .reverse()}
       </div>
     </>
   );
