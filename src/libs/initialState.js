@@ -1,12 +1,12 @@
 export const initialState = [
   {
     id: 1,
-    title: "Hello this is snoopy",
-    note: "This is clone of keep notes.",
+    title: "Replica of Google Keep",
+    note: "This is clone of keep.google.com",
   },
   {
     id: 2,
-    title: "Hello this is saurav",
-    note: "This is clone of google notes..",
+    title: "Tools used",
+    note: "Created using React, Tailwind and ❤️",
   },
 ];

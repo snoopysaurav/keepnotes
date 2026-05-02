@@ -33,7 +33,7 @@ export default function AddNote({ onAddNote }) {
         onBlur={handleContainerBlur}
       >
         <div
-          className="p-3 m-4 w-125 rounded-lg"
+          className="p-3 m-4 w-150 rounded-lg"
           style={{
             boxShadow:
               "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
