@@ -44,11 +44,11 @@ export const App = () => {
       <div
         className={cn(
           {
-            "md:columns-5 gap-1 max-md:columns-2 max-sm:columns-1 px-4":
+            "md:columns-5 gap-1 max-md:columns-2 max-sm:columns-1 md:px-4":
               !isListView,
           },
           {
-            " flex-row items-center justify-center w-160 justify-self-center":
+            " flex-row items-center justify-center md:w-160 justify-self-center":
               isListView,
           },
         )}

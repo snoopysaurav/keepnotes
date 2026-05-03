@@ -95,7 +95,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
             <button
               className={cn(
                 "p-2 my-2 transition-all duration-300 rounded-md hover:bg-gray-100 hover:cursor-pointer ",
-                { hidden: !isHover },
+                { "md:hidden": !isHover },
               )}
               onClick={(e) => {
                 e.stopPropagation();
