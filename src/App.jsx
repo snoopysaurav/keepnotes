@@ -13,6 +13,7 @@ let initialId = 3;
 // App component
 export const App = () => {
   const [notes, dispatch] = useReducer(taskReducer, initialState);
+  const [searchQuery, setSearchQuery] = useState("");
   const { isListView } = useContext(ListViewContext);
 
   function handleNoteAdd(noteData) {
@@ -32,14 +33,19 @@ export const App = () => {
     dispatch({ type: "EDIT_NOTE", note: note });
   }
 
+  function handleSearchQuery(e) {
+    setSearchQuery(e.target.value);
+  }
+
   return (
     <>
-      <Navbar />
+      <Navbar handleSearch={handleSearchQuery} />
       <AddNote onAddNote={handleNoteAdd} />
       <div
         className={cn(
           {
-            "md:columns-5 gap-1 max-md:columns-2 max-sm:columns-1": !isListView,
+            "md:columns-5 gap-1 max-md:columns-2 max-sm:columns-1 px-4":
+              !isListView,
           },
           {
             " flex-row items-center justify-center w-160 justify-self-center":
@@ -47,20 +53,45 @@ export const App = () => {
           },
         )}
       >
-        {notes
-          .map((note) => (
-            <div
-              key={note.id}
-              className="w-full inline-block break-inside-avoid"
-            >
-              <NoteCard
-                note={note}
-                handleDelete={handleNoteDelete}
-                handleEdit={handleNoteEdit}
-              />
-            </div>
-          ))
-          .reverse()}
+        {/* For Search Functionality */}
+        {searchQuery.length > 1 ? (
+          <>
+            {notes
+              .filter((note) =>
+                note.title.toLowerCase().includes(searchQuery.toLowerCase()),
+              )
+              .map((note) => (
+                <div
+                  key={note.id}
+                  className="w-full inline-block break-inside-avoid"
+                >
+                  <NoteCard
+                    note={note}
+                    handleDelete={handleNoteDelete}
+                    handleEdit={handleNoteEdit}
+                  />
+                </div>
+              ))
+              .reverse()}
+          </>
+        ) : (
+          <>
+            {notes
+              .map((note) => (
+                <div
+                  key={note.id}
+                  className="w-full inline-block break-inside-avoid"
+                >
+                  <NoteCard
+                    note={note}
+                    handleDelete={handleNoteDelete}
+                    handleEdit={handleNoteEdit}
+                  />
+                </div>
+              ))
+              .reverse()}
+          </>
+        )}
       </div>
     </>
   );

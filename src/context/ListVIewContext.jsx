@@ -7,7 +7,6 @@ export default function ListViewProvider({ children }) {
 
   function toggleListView() {
     setIsListView(!isListView);
-    console.log("isListView: " + isListView);
   }
 
   return (

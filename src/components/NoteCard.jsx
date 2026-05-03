@@ -47,7 +47,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
               </span>
               <label className="w-full">
                 <input
-                  className="text-xl font-semibold outline-none mb-2 w-full"
+                  className="text-xl font-medium outline-none mb-2 w-full"
                   value={note.title}
                   onChange={(e) => {
                     handleEdit({
@@ -88,7 +88,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
           onClick={toggleEditMode}
         >
           <div className="*:wrap-break-word">
-            <h1 className="text-md font-semibold">{note.title}</h1>
+            <h1 className="text-lg font-medium my-1">{note.title}</h1>
             <h3 className="text-sm ">{note.note}</h3>
           </div>
           <div className="flex items-center justify-end h-5">
