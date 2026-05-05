@@ -1,7 +1,7 @@
 import { Trash } from "lucide-react";
 import { useContext, useState } from "react";
-import { cn } from "../libs/cn";
-import CloseButton from "./buttons/CloseButton";
+import { cn } from "@/libs/cn";
+import CloseButton from "@/components/buttons/CloseButton";
 
 export const NoteCard = ({ note, handleDelete, handleEdit }) => {
   const [isHover, setIsHover] = useState(false);

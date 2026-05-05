@@ -1,12 +1,12 @@
 export const initialState = [
   {
     id: 1,
-    title: "Replica of Google Keep",
-    note: "This is clone of keep.google.com",
+    title: "Google Keep",
+    note: "This is a clone of keep.google.com, React and Tailwindcss are used for this project.",
   },
   {
     id: 2,
-    title: "Tools used",
-    note: "Created using React, Tailwind and ❤️",
+    title: "Developer",
+    note: "Crafted with ❤️ by Saurav Khatiwada",
   },
 ];

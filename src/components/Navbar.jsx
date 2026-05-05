@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
-import ListViewButton from "./buttons/ListViewButton";
-import logo from "../assets/keep.svg";
+import ListViewButton from "@/components/buttons/ListViewButton";
+import logo from "@/assets/keep.svg";
 
 export default function Navbar({ handleSearch }) {
   return (
