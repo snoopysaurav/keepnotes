@@ -1,36 +1,69 @@
-import { useContext, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import AddNote from "@/components/AddNote";
 import NoteCard from "@/components/NoteCard";
 import Navbar from "@/components/Navbar";
 
-import taskReducer from "@/store/taskReducer";
+import taskReducer from "../store/taskReducer";
 import { initialState } from "@/libs/initialState";
 import { ListViewContext } from "@/context/ListVIewContext";
 import { cn } from "@/libs/cn";
-
-let initialId = 3;
+import { useAuth } from "../context/AuthContext";
+import { supabase } from "../utils/supabase";
+import { errorToast, successToast } from "../components/Toast";
+import { Toaster } from "react-hot-toast";
 
 // App component
 export const Home = () => {
-  const [notes, dispatch] = useReducer(taskReducer, initialState);
+  const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { isListView } = useContext(ListViewContext);
+  const { user } = useAuth();
 
-  function handleNoteAdd(noteData) {
-    dispatch({
-      type: "ADD_NOTE",
-      id: initialId++,
-      title: noteData.title,
-      note: noteData.note,
-    });
+  // Sync notes to Supabase when they change
+  useEffect(() => {
+    if (!user) return;
+    getNotes(); //function called <--
+  }, [user]);
+
+  //function to get data from supabase
+  async function getNotes() {
+    const { data } = await supabase.from("notes").select();
+    setNotes(data);
   }
 
-  function handleNoteDelete(noteId) {
-    dispatch({ type: "DELETE_NOTE", id: noteId });
+  async function handleNoteAdd(noteData) {
+    // Update local state first
+    // dispatch({
+    //   type: "ADD_NOTE",
+    //   title: noteData.title,
+    //   note: noteData.note,
+    // });
+
+    // Then sync to Supabase
+    if (user) {
+      await supabase.from("notes").insert([
+        {
+          user_id: user.id,
+          title: noteData.title || "",
+          content: noteData.note || "",
+        },
+      ]);
+    }
   }
 
-  function handleNoteEdit(note) {
-    dispatch({ type: "EDIT_NOTE", note: note });
+  async function handleNoteDelete(noteId) {
+    const { error } = await supabase.from("notes").delete().eq("id", noteId);
+  }
+
+  async function handleNoteEdit(id, title, content) {
+    const [data, error] = await supabase
+      .from("notes")
+      .update({
+        title: title,
+        content: content,
+      })
+      .eq("id", id);
+    successToast("Note Deleted", 3000);
   }
 
   function handleSearchQuery(e) {
@@ -41,6 +74,10 @@ export const Home = () => {
     <>
       <Navbar handleSearch={handleSearchQuery} />
       <AddNote onAddNote={handleNoteAdd} />
+      <div className="p-4 m-4 text-xl">
+        Welcome,{" "}
+        <span className="text-yellow-500">{user?.user_metadata?.username}</span>
+      </div>
       <div
         className={cn(
           {
@@ -67,7 +104,7 @@ export const Home = () => {
                 >
                   <NoteCard
                     note={note}
-                    handleDelete={handleNoteDelete}
+                    handleDelete={handleNoteDelete(note.id)}
                     handleEdit={handleNoteEdit}
                   />
                 </div>
@@ -93,6 +130,7 @@ export const Home = () => {
           </>
         )}
       </div>
+      <Toaster />
     </>
   );
 };

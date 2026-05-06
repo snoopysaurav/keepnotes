@@ -2,9 +2,11 @@ import { useForm } from "react-hook-form";
 import ButtonPrimary from "../buttons/PrimaryButton";
 import { cn } from "../../libs/cn";
 import google from "@/assets/google.svg";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "../../utils/supabase";
+import { Toaster } from "react-hot-toast";
+import { errorToast, successToast } from "../Toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ export default function Login() {
     reset,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       email: "",
@@ -23,21 +25,22 @@ export default function Login() {
   });
 
   const handleLogin = async () => {
-    setLoading(true);
     setError("");
-
     const { error } = await supabase.auth.signInWithPassword({
       email: getValues("email"),
       password: getValues("password"),
     });
     if (error) {
+      console.log(error);
       setError(error.message);
+      errorToast(error.message, 3000);
     } else {
+      console.log("Login Successful");
       navigate("/keep");
     }
-    console.log("Login successful");
     reset();
   };
+
   return (
     <>
       <section
@@ -81,8 +84,13 @@ export default function Login() {
                 })}
               />
             </label>
+            <div className="w-full flex justify-end">
+              <span className="text-sm font-medium hover:underline hover:cursor-pointer">
+                <Link to="/reset">Forgot Password?</Link>
+              </span>
+            </div>
             <ButtonPrimary style={{ backgroundColor: "#ACE755" }}>
-              Login
+              {isSubmitting ? "Loading..." : "Login"}
             </ButtonPrimary>
             <ButtonPrimary type="button">
               <div className="flex items-center justify-center">
@@ -101,7 +109,7 @@ export default function Login() {
                 Don't have an account?{" "}
                 <strong
                   className="hover:cursor-pointer"
-                  onClick={() => navigateSignup("/signup")}
+                  onClick={() => navigate("/signup")}
                 >
                   Sign up
                 </strong>
@@ -109,6 +117,7 @@ export default function Login() {
             </div>
           </form>
         </div>
+        <Toaster />
       </section>
     </>
   );

@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import ListViewButton from "@/components/buttons/ListViewButton";
 import logo from "@/assets/keep.svg";
+import LogoutButton from "./buttons/LogoutButton";
 
 export default function Navbar({ handleSearch }) {
   return (
@@ -20,8 +21,9 @@ export default function Navbar({ handleSearch }) {
           />
         </label>
       </div>
-      <div className="max-sm:hidden max-md:justify-self-end">
+      <div className=" max-md:justify-self-end">
         <ListViewButton />
+        <LogoutButton />
       </div>
     </nav>
   );

@@ -22,7 +22,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
     <>
       {isEdit ? (
         <div
-          className="absolute inset-0 h-full w-full bg-amber-50"
+          className="absolute top-0 left-0 h-screen w-full bg-amber-50 overflow-hidden no-scroll"
           style={{
             background: "rgba(255, 255, 255, 0.12)",
             borderRadius: "16px",
@@ -59,7 +59,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
               </label>
               <textarea
                 className="outline-none text-md mt-2 w-full overflow-hidden resize-none"
-                value={note.note}
+                value={note.content}
                 onChange={(e) => {
                   handleEdit({
                     ...note,
@@ -89,7 +89,7 @@ export const NoteCard = ({ note, handleDelete, handleEdit }) => {
         >
           <div className="*:wrap-break-word">
             <h1 className="text-lg font-medium my-1">{note.title}</h1>
-            <h3 className="text-sm ">{note.note}</h3>
+            <h3 className="text-sm ">{note.content}</h3>
           </div>
           <div className="flex items-center justify-end h-5">
             <button

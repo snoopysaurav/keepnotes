@@ -7,7 +7,7 @@ export default function ListViewButton() {
   return (
     <button
       onClick={toggleListView}
-      className="p-3 m-2 hover:rounded-full hover:bg-gray-100 hover:cursor-pointer"
+      className="p-3 m-1 hover:rounded-full hover:bg-gray-100 hover:cursor-pointer"
     >
       {isListView ? <LayoutGrid /> : <Rows2 />}
     </button>

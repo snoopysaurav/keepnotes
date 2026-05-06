@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router";
-import Home from "../pages/Home";
+import Keep from "../pages/Keep";
 import Signup from "@/components/auth/Signup";
 import Login from "@/components/auth/Login";
 import Error404 from "../pages/Error404";
+import ProtectedRoute from "../components/ProtectedRoute";
+import Reset from "../components/auth/Reset";
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +17,15 @@ export const router = createBrowserRouter([
   },
   {
     path: "/keep",
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Keep />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/reset",
+    element: <Reset />,
   },
   {
     path: "*",

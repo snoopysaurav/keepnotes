@@ -5,6 +5,8 @@ import google from "@/assets/google.svg";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase.js";
+import { Toaster } from "react-hot-toast";
+import { successToast, errorToast } from "../Toast";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -21,13 +23,10 @@ export default function Signup() {
       password: "",
     },
   });
-
   const [error, setError] = useState("");
 
   const handleSignup = async () => {
     setError("");
-    setLoading(true);
-
     const { error } = await supabase.auth.signUp({
       email: getValues("email"),
       password: getValues("password"),
@@ -38,13 +37,14 @@ export default function Signup() {
 
     if (error) {
       setError(error.message);
-      console.log(error);
+      errorToast(error.message, 3000);
     } else {
-      navigate("/keep");
+      successToast("Signup Successful", 2000);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     }
-    console.log("Successfuly created an user, ", getValues("email"));
     reset();
-    setLoading(false);
   };
 
   const handleGoogleSignup = async () => {
@@ -166,6 +166,7 @@ export default function Signup() {
           </div>
         </form>
       </div>
+      <Toaster />
     </section>
   );
 }

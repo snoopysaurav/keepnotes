@@ -1,10 +1,12 @@
+import { supabase } from "../utils/supabase";
+
 export default function taskReducer(notes, action) {
   switch (action.type) {
     case "ADD_NOTE":
       return [
         ...notes,
         {
-          id: action.id,
+          id: Date.now(),
           title: action.title || "",
           note: action.note || "",
         },
@@ -23,6 +25,6 @@ export default function taskReducer(notes, action) {
       });
 
     default:
-      return console.log("Unexpected Event ");
+      return notes;
   }
 }
