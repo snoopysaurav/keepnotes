@@ -3,13 +3,16 @@ import { cn } from "../../libs/cn";
 import ButtonPrimary from "../buttons/PrimaryButton";
 import google from "@/assets/google.svg";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import { supabase } from "@/utils/supabase.js";
 
 export default function Signup() {
-  const navigateLogin = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
@@ -18,14 +21,44 @@ export default function Signup() {
       password: "",
     },
   });
+
+  const [error, setError] = useState("");
+
+  const handleSignup = async () => {
+    setError("");
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
+      email: getValues("email"),
+      password: getValues("password"),
+      options: {
+        data: { username: getValues("username") },
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      console.log(error);
+    } else {
+      navigate("/keep");
+    }
+    console.log("Successfuly created an user, ", getValues("email"));
+    reset();
+    setLoading(false);
+  };
+
+  const handleGoogleSignup = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+    if (error) setError(error.message);
+  };
+
   return (
     <section className="flex items-center justify-center h-screen">
       <div className="p-4 m-2 w-100">
         <form
-          onSubmit={handleSubmit((data) => {
-            console.log(data);
-            reset();
-          })}
+          onSubmit={handleSubmit(handleSignup)}
           className={cn(
             "[&_label]:my-1 [&_label]:w-full p-4 m-2 flex flex-col items-center justify-center  [&_input]:outline-none [&_input]:my-2 [&_input]:border [&_input]:rounded-md [&_input]:p-2 [&_input]:w-full",
           )}
@@ -108,7 +141,7 @@ export default function Signup() {
             <span className="text-md mx-4">or</span>
             <hr className="border-t-2 border-gray-300 w-full" />
           </div>
-          <ButtonPrimary type="button">
+          <ButtonPrimary type="button" onClick={handleGoogleSignup}>
             <div className="flex items-center justify-center">
               <img
                 src={google}
@@ -125,7 +158,7 @@ export default function Signup() {
               Already have an account?{" "}
               <strong
                 className="hover:cursor-pointer"
-                onClick={() => navigateLogin("/login")}
+                onClick={() => navigate("/")}
               >
                 Login
               </strong>

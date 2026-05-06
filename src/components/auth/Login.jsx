@@ -3,21 +3,41 @@ import ButtonPrimary from "../buttons/PrimaryButton";
 import { cn } from "../../libs/cn";
 import google from "@/assets/google.svg";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import { supabase } from "../../utils/supabase";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
   const {
     register,
     reset,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      emailOrUsername: "",
+      email: "",
       password: "",
     },
   });
 
-  const navigateSignup = useNavigate();
+  const handleLogin = async () => {
+    setLoading(true);
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: getValues("email"),
+      password: getValues("password"),
+    });
+    if (error) {
+      setError(error.message);
+    } else {
+      navigate("/keep");
+    }
+    console.log("Login successful");
+    reset();
+  };
   return (
     <>
       <section
@@ -27,11 +47,7 @@ export default function Login() {
         <div className="w-100 p-4 m-2">
           <form
             className="p-4 m-2 flex flex-col  items-center justify-center [&_label]:my-2 [&_label]:w-full [&_input]:my-2 [&_input]:w-full [&_input]:p-2 [&_input]:rounded-md [&_input]:outline-none [&_input]:border "
-            onSubmit={handleSubmit((data) => {
-              console.log(data);
-
-              reset();
-            })}
+            onSubmit={handleSubmit(handleLogin)}
           >
             <div className="w-full my-2">
               <h1 className="text-2xl text-gray-900 font-medium">
@@ -42,15 +58,13 @@ export default function Login() {
             <label>
               <span className="font-medium">
                 Email or Username{" "}
-                {errors.emailOrUsername && (
-                  <span className="text-red-500">*</span>
-                )}
+                {errors.email && <span className="text-red-500">*</span>}
               </span>
               <input
-                {...register("emailOrUsername", { required: "Required" })}
+                {...register("email", { required: "Required" })}
                 type="text"
                 className={cn("border-gray-200", {
-                  "border-red-300": errors.emailOrUsername,
+                  "border-red-300": errors.email,
                 })}
               />
             </label>
@@ -63,7 +77,7 @@ export default function Login() {
                 {...register("password", { required: "Required" })}
                 type="password"
                 className={cn("border-gray-200", {
-                  "border-red-300": errors.emailOrUsername,
+                  "border-red-300": errors.password,
                 })}
               />
             </label>
