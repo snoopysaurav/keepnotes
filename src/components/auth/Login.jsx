@@ -41,6 +41,19 @@ export default function Login() {
     reset();
   };
 
+  const handleGoogleSignup = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/keep`,
+      },
+    });
+    if (error) {
+      setError(error.message);
+      errorToast(error.message, 3000);
+    }
+  };
+
   return (
     <>
       <section
@@ -92,7 +105,7 @@ export default function Login() {
             <ButtonPrimary style={{ backgroundColor: "#ACE755" }}>
               {isSubmitting ? "Loading..." : "Login"}
             </ButtonPrimary>
-            <ButtonPrimary type="button">
+            <ButtonPrimary type="button" onClick={handleGoogleSignup}>
               <div className="flex items-center justify-center">
                 <img
                   src={google}

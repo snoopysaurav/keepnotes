@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "../../libs/cn";
 import ButtonPrimary from "../buttons/PrimaryButton";
 import google from "@/assets/google.svg";
-import { useNavigate } from "react-router";
+import { redirect, useNavigate } from "react-router";
 import { useState } from "react";
 import { supabase } from "@/utils/supabase.js";
 import { Toaster } from "react-hot-toast";
@@ -50,8 +50,14 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/keep`,
+      },
     });
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+      errorToast(error.message, 3000);
+    }
   };
 
   return (

@@ -102,7 +102,7 @@ export const Home = () => {
       <div className="p-4 m-4 text-lg">
         Welcome,{" "}
         <span className="text-yellow-500 font-semibold">
-          {user?.user_metadata?.username}
+          {user?.user_metadata?.username || user?.user_metadata?.name}
         </span>
       </div>
       <div
