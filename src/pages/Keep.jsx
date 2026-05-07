@@ -9,7 +9,7 @@ import { ListViewContext } from "@/context/ListVIewContext";
 import { cn } from "@/libs/cn";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../utils/supabase";
-import { errorToast, successToast } from "../components/Toast";
+import { errorToast, successToast, iconToast } from "../components/Toast";
 import { Toaster } from "react-hot-toast";
 
 // App component
@@ -32,38 +32,63 @@ export const Home = () => {
   }
 
   async function handleNoteAdd(noteData) {
-    // Update local state first
-    // dispatch({
-    //   type: "ADD_NOTE",
-    //   title: noteData.title,
-    //   note: noteData.note,
-    // });
-
-    // Then sync to Supabase
     if (user) {
-      await supabase.from("notes").insert([
-        {
-          user_id: user.id,
-          title: noteData.title || "",
-          content: noteData.note || "",
-        },
-      ]);
+      const { data, error } = await supabase
+        .from("notes")
+        .insert([
+          {
+            user_id: user.id,
+            title: noteData.title || "",
+            content: noteData.note || "",
+          },
+        ])
+        .select();
+      if (!error) {
+        setNotes((prev) => [...prev, data[0]]);
+        successToast("Note Added", 2000);
+      }
     }
   }
 
   async function handleNoteDelete(noteId) {
     const { error } = await supabase.from("notes").delete().eq("id", noteId);
+    if (!error) setNotes((prev) => prev.filter((note) => note.id !== noteId));
+    iconToast("Note Deleted", 2000, "top-center", "😣");
   }
 
-  async function handleNoteEdit(id, title, content) {
-    const [data, error] = await supabase
-      .from("notes")
-      .update({
-        title: title,
-        content: content,
-      })
-      .eq("id", id);
-    successToast("Note Deleted", 3000);
+  async function handleNoteEdit(id, updatedData) {
+    try {
+      // Optimistic update - update UI immediately
+      setNotes((prev) =>
+        prev.map((note) =>
+          note.id === id
+            ? {
+                ...note,
+                title: updatedData.title,
+                content: updatedData.content,
+              }
+            : note,
+        ),
+      );
+
+      // Sync to Supabase
+      const { error } = await supabase
+        .from("notes")
+        .update({
+          title: updatedData.title,
+          content: updatedData.content,
+        })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      successToast("Note Updated Successfully", 2000);
+    } catch (error) {
+      console.error("Error updating note:", error);
+      errorToast("Failed to update note", 2000);
+      // Revert state on error by refetching
+      getNotes();
+    }
   }
 
   function handleSearchQuery(e) {
@@ -74,9 +99,11 @@ export const Home = () => {
     <>
       <Navbar handleSearch={handleSearchQuery} />
       <AddNote onAddNote={handleNoteAdd} />
-      <div className="p-4 m-4 text-xl">
+      <div className="p-4 m-4 text-lg">
         Welcome,{" "}
-        <span className="text-yellow-500">{user?.user_metadata?.username}</span>
+        <span className="text-yellow-500 font-semibold">
+          {user?.user_metadata?.username}
+        </span>
       </div>
       <div
         className={cn(
@@ -104,7 +131,7 @@ export const Home = () => {
                 >
                   <NoteCard
                     note={note}
-                    handleDelete={handleNoteDelete(note.id)}
+                    handleDelete={() => handleNoteDelete(note.id)}
                     handleEdit={handleNoteEdit}
                   />
                 </div>
@@ -121,7 +148,7 @@ export const Home = () => {
                 >
                   <NoteCard
                     note={note}
-                    handleDelete={handleNoteDelete}
+                    handleDelete={() => handleNoteDelete(note.id)}
                     handleEdit={handleNoteEdit}
                   />
                 </div>

@@ -14,4 +14,12 @@ function errorToast(message, duration, position = "top-center") {
   });
 }
 
-export { successToast, errorToast };
+function iconToast(message, duration, position = "top-center", icon = "💋") {
+  toast(message, {
+    duration: duration,
+    position: position,
+    icon: icon,
+  });
+}
+
+export { successToast, errorToast, iconToast };
