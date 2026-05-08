@@ -35,30 +35,10 @@ const ResetPassword = () => {
     }
     successToast("Password updated successfully", 3000);
     resetPasswordFlag();
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+    reset();
+    navigate("/");
   }
-  // useEffect(() => {
-  //   const handlePasswordReset = async () => {
-  //     const newPassword = prompt(
-  //       "What would you like your new password to be?",
-  //     );
-  //     if (newPassword) {
-  //       const { data, error } = await supabase.auth.updateUser({
-  //         password: newPassword,
-  //       });
-  //       if (data) {
-  //         alert("Password updated successfully!");
-  //         resetPasswordFlag();
-  //         navigate("/");
-  //       }
-  //       if (error) alert("There was an error updating your password.");
-  //     }
-  //   };
 
-  //   handlePasswordReset();
-  // }, []);
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <div className="w-100">
@@ -69,19 +49,17 @@ const ResetPassword = () => {
           </h1>
         </div>
 
-        <form
-          className="w-full"
-          onSubmit={handleSubmit(() => {
-            handlePasswordReset();
-            reset();
-          })}
-        >
+        <form className="w-full" onSubmit={handleSubmit(handlePasswordReset)}>
           <label>
             <span className="w-full font-medium">Your new password</span>
             <input
               type="password"
               {...register("password", {
                 required: "Required",
+                minLength: {
+                  value: 6,
+                  message: "Min length is 6",
+                },
               })}
               className={cn(
                 "outline-none p-2 text-lg border my-2 border-gray-200 rounded-md w-full",
@@ -89,7 +67,11 @@ const ResetPassword = () => {
               )}
             />
           </label>
-
+          {errors.password && (
+            <p className="text-sm text-red-500 mb-2">
+              {errors?.password?.message}
+            </p>
+          )}
           <ButtonPrimary
             style={{ backgroundColor: "rgb(172, 231, 85)", margin: 0 }}
           >

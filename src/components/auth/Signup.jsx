@@ -128,7 +128,10 @@ export default function Signup() {
               {errors.password && <span className="text-red-500">*</span>}
             </span>
             <input
-              {...register("password", { required: "Required" })}
+              {...register("password", {
+                required: "Required",
+                minLength: { value: 6, message: "Min length is 6" },
+              })}
               type="password"
               className={cn("border-gray-300", {
                 "border-red-200": errors?.password,
