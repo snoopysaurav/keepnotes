@@ -5,6 +5,7 @@ import { CircleX } from "lucide-react";
 import { cn } from "../../libs/cn";
 import { Toaster } from "react-hot-toast";
 import { errorToast, successToast } from "../Toast";
+import keep from "../../assets/keep.svg";
 
 const Reset = ({ onClick }) => {
   const {
@@ -55,7 +56,10 @@ const Reset = ({ onClick }) => {
           }}
         >
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-medium">Reset Password</h1>
+            <div className="flex items-center gap-2">
+              <img src={keep} height={50} width={50} />
+              <h1 className="text-xl font-medium">Reset Password</h1>
+            </div>
             <button
               className="p-2 text-gray-700 hover:cursor-pointer outline-none hover:scale-110 transition-all delay-100"
               onClick={onClick}
@@ -76,7 +80,7 @@ const Reset = ({ onClick }) => {
               )}
               placeholder="Your email address"
             />
-            <PrimaryButton type="submit">
+            <PrimaryButton style={{ backgroundColor: "rgb(172, 231, 85)" }}>
               {isSubmitting ? "Sending..." : "Send"}
             </PrimaryButton>
           </form>

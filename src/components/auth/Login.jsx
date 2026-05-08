@@ -3,7 +3,7 @@ import ButtonPrimary from "../buttons/PrimaryButton";
 import { cn } from "../../libs/cn";
 import google from "@/assets/google.svg";
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { Toaster } from "react-hot-toast";
 import { errorToast, successToast } from "../Toast";
@@ -61,6 +61,9 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    supabase.auth.signOut();
+  }, []);
   return (
     <>
       {isResetOpen && <Reset onClick={handleResetOpen} />}
@@ -81,7 +84,7 @@ export default function Login() {
             </div>
             <label>
               <span className="font-medium">
-                Email or Username{" "}
+                Email Address{" "}
                 {errors.email && <span className="text-red-500">*</span>}
               </span>
               <input
