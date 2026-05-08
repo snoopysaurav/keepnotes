@@ -4,8 +4,7 @@ import Signup from "@/components/auth/Signup";
 import Login from "@/components/auth/Login";
 import Error404 from "../pages/Error404";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Reset from "../components/auth/Reset";
-
+import ResetPassword from "../components/auth/ResetPassword";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -23,9 +22,14 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+
   {
-    path: "/reset",
-    element: <Reset />,
+    path: "reset-password",
+    element: (
+      <ProtectedRoute requirePasswordRecovery={true}>
+        <ResetPassword />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",

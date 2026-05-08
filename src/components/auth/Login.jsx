@@ -7,10 +7,13 @@ import { useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { Toaster } from "react-hot-toast";
 import { errorToast, successToast } from "../Toast";
+import Reset from "./Reset";
 
 export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [isResetOpen, setIsResetOpen] = useState(false);
+
   const {
     register,
     reset,
@@ -23,6 +26,10 @@ export default function Login() {
       password: "",
     },
   });
+
+  function handleResetOpen() {
+    setIsResetOpen((prev) => !prev);
+  }
 
   const handleLogin = async () => {
     setError("");
@@ -56,6 +63,7 @@ export default function Login() {
 
   return (
     <>
+      {isResetOpen && <Reset onClick={handleResetOpen} />}
       <section
         name="Login"
         className="flex items-center justify-center h-screen"
@@ -98,8 +106,14 @@ export default function Login() {
               />
             </label>
             <div className="w-full flex justify-end">
-              <span className="text-sm font-medium hover:underline hover:cursor-pointer">
-                <Link to="/reset">Forgot Password?</Link>
+              <span className="text-sm font-medium">
+                <button
+                  type="button"
+                  onClick={() => setIsResetOpen(true)}
+                  className="hover:underline hover:cursor-pointer"
+                >
+                  Forgot Password?
+                </button>
               </span>
             </div>
             <ButtonPrimary style={{ backgroundColor: "#ACE755" }}>

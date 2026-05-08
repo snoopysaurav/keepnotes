@@ -117,7 +117,9 @@ export default function Signup() {
               })}
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors?.email?.message}</p>
+              <span className="text-sm text-red-500">
+                {errors?.email?.message}
+              </span>
             )}
           </label>
           <label>
