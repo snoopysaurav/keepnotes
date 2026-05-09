@@ -8,6 +8,7 @@ import { supabase } from "../../utils/supabase";
 import { Toaster } from "react-hot-toast";
 import { errorToast, successToast } from "../Toast";
 import Reset from "./Reset";
+import keep from "../../assets/keep.svg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function Login() {
       errorToast(error.message, 3000);
     } else {
       console.log("Login Successful");
-      navigate("/keep");
+      navigate("/keep", { replace: true });
     }
     reset();
   };
@@ -80,7 +81,7 @@ export default function Login() {
               <h1 className="text-2xl text-gray-900 font-medium">
                 Try Snoopy Keep for free!
               </h1>
-              <h3 className="text-md text-gray-700">Login to continue</h3>
+              <h3 className="text-md text-gray-700">Login to continue </h3>
             </div>
             <label>
               <span className="font-medium">
@@ -125,6 +126,11 @@ export default function Login() {
             <ButtonPrimary style={{ backgroundColor: "#ACE755" }}>
               {isSubmitting ? "Loading..." : "Login"}
             </ButtonPrimary>
+            <div className="w-full flex items-center justify-center">
+              <hr className="border-t-2  border-gray-300 w-full" />
+              <span className="text-md mx-4">or</span>
+              <hr className="border-t-2 border-gray-300 w-full" />
+            </div>
             <ButtonPrimary type="button" onClick={handleGoogleSignup}>
               <div className="flex items-center justify-center">
                 <img

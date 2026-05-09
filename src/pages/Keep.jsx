@@ -3,8 +3,6 @@ import AddNote from "@/components/AddNote";
 import NoteCard from "@/components/NoteCard";
 import Navbar from "@/components/Navbar";
 
-import taskReducer from "../store/taskReducer";
-import { initialState } from "@/libs/initialState";
 import { ListViewContext } from "@/context/ListVIewContext";
 import { cn } from "@/libs/cn";
 import { useAuth } from "../context/AuthContext";
